@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { UserService } from './../user/user.service';
 import { User } from '../user/user';
@@ -14,12 +15,17 @@ export class HeaderComponent implements OnInit {
   user$: Observable<User>;
   user: User;
 
-  constructor(private userService: UserService) {
+  ngOnInit() {
+  }
+
+  constructor(private userService: UserService, private router: Router) {
     this.user$ = userService.getUser();
     this.user$.subscribe(user => this.user = user);
   }
 
-  ngOnInit() {
+  logout() {
+    this.userService.logout();
+    this.router.navigate(['']);
   }
 
 }

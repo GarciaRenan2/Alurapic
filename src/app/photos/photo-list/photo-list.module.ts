@@ -11,18 +11,13 @@ import { SearchComponent } from './search/search.component';
 import { DarkenOnHoverModule } from '../../shared/directives/darken-on-hover/darken-on-hover.module';
 
 @NgModule({
-    declarations: [
-        PhotoListComponent,
-        PhotosComponent,
-        LoadButtonComponent,
-        FilterByDescription,
-        SearchComponent
-    ],
-    imports: [ 
-        CommonModule,
-        PhotoModule,
-        CardModule, 
-        DarkenOnHoverModule
-    ]
+  declarations: [
+    PhotoListComponent,
+    PhotosComponent,
+    LoadButtonComponent,
+    FilterByDescription,
+    SearchComponent,
+  ],
+  imports: [CommonModule, PhotoModule, CardModule, DarkenOnHoverModule],
 })
 export class PhotoListModule {}
