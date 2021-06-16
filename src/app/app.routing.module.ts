@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { SignInComponent } from './home/signin/signin.component';
+import { SignUpComponent } from './home/signup/signup.component';
 import { PhotoListComponent } from './photos/photo-list/photo-list.component';
 import { PhotoFormComponent } from './photos/photo-form/photo-form.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
@@ -13,6 +14,10 @@ const routes: Routes = [
     path: '',
     component: SignInComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'signup',
+    component: SignUpComponent
   },
   {
     path: 'user/:userName',
