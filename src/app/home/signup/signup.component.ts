@@ -1,16 +1,31 @@
+import { PlatformDetectorService } from './../../core/platform-detector/platform-detector.service';
+import { SignupService } from './signup.service';
+import { NewUser } from './new-user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+
+import { lowerCaseValidator } from '../../shared/validators/lower-case.validator';
+import { UserNotTakenValidatorService } from './user-not-taken.validator.service';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './signup.component.html',
+  providers: [UserNotTakenValidatorService]
 })
 export class SignUpComponent implements OnInit {
-  singUpForm: FormGroup;
+  signUpForm: FormGroup;
+  @ViewChild('emailInput') emailInput: ElementRef<HTMLInputElement>;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private userNotTakenValidatorService: UserNotTakenValidatorService,
+    private signUpServide: SignupService,
+    private router: Router,
+    private platformDetectorService: PlatformDetectorService
+  ) {}
 
   ngOnInit(): void {
-    this.singUpForm = this.formBuilder.group({
+    this.signUpForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       fullName: [
         '',
@@ -24,10 +39,11 @@ export class SignUpComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern(/^[a-z\d_\-]+$/),
+          lowerCaseValidator,
           Validators.minLength(2),
           Validators.maxLength(30),
         ],
+        [this.userNotTakenValidatorService.checkUserNameTaken()],
       ],
       password: [
         '',
@@ -38,5 +54,17 @@ export class SignUpComponent implements OnInit {
         ],
       ],
     });
+    if (this.platformDetectorService.isPlatformBrowser()) {
+      this.emailInput.nativeElement.focus();
+    }
+  }
+
+  signUp() {
+    const newUser = this.signUpForm.getRawValue() as NewUser;
+    this.signUpServide
+      .signUp(newUser)
+      .subscribe(() => this.router.navigate(['']),
+      err => console.log(err)
+      );
   }
 }
